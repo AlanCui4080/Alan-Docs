@@ -1,0 +1,135 @@
+@@ the qemu log is in the end of file
+
+
+alan@ubuntuVM:~/osdev$ gdb
+GNU gdb (Ubuntu 7.11.1-0ubuntu1~16.5) 7.11.1
+Copyright (C) 2016 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "x86_64-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+<http://www.gnu.org/software/gdb/documentation/>.
+For help, type "help".
+Type "apropos word" to search for commands related to "word".
+(gdb) targer remote :1234
+Undefined command: "targer".  Try "help".
+(gdb) target remote :1234
+Remote debugging using :1234
+0x0000fff0 in ?? ()
+(gdb) i r                                                                       ; before start
+eax            0x0      0
+ecx            0x0      0
+edx            0x663    1635
+ebx            0x0      0
+esp            0x0      0x0
+ebp            0x0      0x0
+esi            0x0      0
+edi            0x0      0
+eip            0xfff0   0xfff0
+eflags         0x2      [ ]
+cs             0xf000   61440
+ss             0x0      0
+ds             0x0      0
+es             0x0      0
+fs             0x0      0
+gs             0x0      0
+(gdb) c   
+Continuing.
+^C                                                                              ;The Qemu screen is twinkle now 
+Program received signal SIGINT, Interrupt.
+0x1ffb0f02 in ?? ()
+(gdb) i r
+eax            0x6df2   28146
+ecx            0x0      0
+edx            0x0      0
+ebx            0x1ffae540       536536384
+esp            0x6dd8   0x6dd8
+ebp            0xf5604  0xf5604
+esi            0xbb8    3000
+edi            0xf5610  1005072
+eip            0x1ffb0f02       0x1ffb0f02        ;The eip looks like stopped 
+eflags         0x46     [ PF ZF ]                                               ; The PF is open 
+cs             0x8      8
+ss             0x10     16
+ds             0x10     16
+es             0x10     16
+fs             0x10     16
+gs             0x10     16
+(gdb) c
+Continuing.
+^C
+Program received signal SIGINT, Interrupt.
+0x1ffb0b12 in ?? ()
+(gdb) i r
+eax            0x24     36
+ecx            0x1694   5780
+edx            0x511    1297
+ebx            0x2400   9216
+esp            0x6ab4   0x6ab4
+ebp            0x6e10   0x6e10
+esi            0x1ffaec00       536538112
+edi            0xcb56c  832876
+eip            0x1ffb0b12       0x1ffb0b12 ;The eip looks like stopped
+eflags         0x46     [ PF ZF ]
+cs             0x8      8
+ss             0x10     16
+ds             0x10     16
+es             0x10     16
+fs             0x10     16
+gs             0x10     16
+(gdb) c
+Continuing.
+^C
+Program received signal SIGINT, Interrupt.
+0x000f0090 in ?? ()
+(gdb) i r
+eax            0x7000   28672
+ecx            0x7c417  508951
+edx            0x0      0
+ebx            0x0      0
+esp            0x6df4   0x6df4
+ebp            0xf58a9  0xf58a9
+esi            0xf6840  1009728 
+edi            0x6      6
+eip            0xf0090  0xf0090 ;Wait,It's Physics Again
+eflags         0x6      [ PF ]
+cs             0x8      8
+ss             0x10     16
+ds             0x10     16
+es             0x10     16
+fs             0x10     16
+gs             0x10     16
+(gdb) 
+
+
+
+
+
+
+
+qemu log:
+
+root@ubuntuVM:/home/alan/osdev# make drun  ; 
+@@@@@@@@@@@@@@@@@@@@@@@@
+drun:boot.img
+	make
+	qemu-system-x86_64 -m 512  -s -S -hda ./boot.img
+@@@@@@@@@@@@@@@@@@@@@
+
+
+make
+make[1]: Entering directory '/home/alan/osdev'
+nasm ./asm/boot.asm -o ./opt1.bin
+nasm ./asm/loader.asm -o ./opt2.bin
+cat ./opt1.bin ./opt2.bin > ./boot.img
+make[1]: Leaving directory '/home/alan/osdev'
+qemu-system-x86_64 -m 512  -s -S -hda ./boot.img
+WARNING: Image format was not specified for './boot.img' and probing guessed raw.
+         Automatically detecting the format is dangerous for raw images, write operations on block 0 will be restricted.
+         Specify the 'raw' format explicitly to remove the restrictions.
+warning: TCG doesn't support requested feature: CPUID.01H:ECX.vmx [bit 5]
